@@ -71,21 +71,9 @@
     <h1>But What?</h1>
     <p class="dot">...</p>
     <p class="mystery">Prepare for something unexpected. Stay curious.</p>
-    <div class="visitor-count">You are visitor #<span id="visitorCounter">loading...</span></div>
+    <div class="visitor-count"> <img src="https://visitor-badge.laobi.icu/badge?page_id=thequiettech-under-construction" alt="Visitor count"></div>
   </div>
 
- <script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', async () => {
-    const counter = new Counter({ workspace: 'quiettech' }); // 🔁 your real workspace
-    try {
-      const result = await counter.up('under-construction');
-      document.getElementById('visitorCounter').textContent = result.value;
-    } catch (err) {
-      console.error('CounterAPI Error:', err);
-      document.getElementById('visitorCounter').textContent = 'N/A';
-    }
-  });
-</script>
+ 
 </body>
 </html>
