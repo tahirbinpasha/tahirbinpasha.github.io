@@ -52,13 +52,6 @@
       animation: dots 1.5s infinite steps(4);
     }
 
-    @keyframes dots {
-      0% { content: "."; }
-      25% { content: ".."; }
-      50% { content: "..."; }
-      75% { content: "...."; }
-    }
-
     .mystery {
       margin-top: 30px;
       font-style: italic;
@@ -78,15 +71,21 @@
     <h1>But What?</h1>
     <p class="dot">...</p>
     <p class="mystery">Prepare for something unexpected. Stay curious.</p>
-    <div class="visitor-count">You are visitor #<span id="visitorCounter">...</span></div>
+    <div class="visitor-count">You are visitor #<span id="visitorCounter">loading...</span></div>
   </div>
 
-  <script>
-    fetch('https://api.countapi.xyz/hit/thequiettech.com/mystery')
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById('visitorCounter').textContent = data.value;
-      });
-  </script>
+ <script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const counter = new Counter({ workspace: 'quiettech' }); // 🔁 your real workspace
+    try {
+      const result = await counter.up('under-construction');
+      document.getElementById('visitorCounter').textContent = result.value;
+    } catch (err) {
+      console.error('CounterAPI Error:', err);
+      document.getElementById('visitorCounter').textContent = 'N/A';
+    }
+  });
+</script>
 </body>
 </html>
