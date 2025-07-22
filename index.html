@@ -64,6 +64,12 @@
       font-style: italic;
       opacity: 0.7;
     }
+
+    .visitor-count {
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -72,6 +78,15 @@
     <h1>But What?</h1>
     <p class="dot">...</p>
     <p class="mystery">Prepare for something unexpected. Stay curious.</p>
+    <div class="visitor-count">You are visitor #<span id="visitorCounter">...</span></div>
   </div>
+
+  <script>
+    fetch('https://api.countapi.xyz/hit/thequiettech.com/mystery')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('visitorCounter').textContent = data.value;
+      });
+  </script>
 </body>
 </html>
