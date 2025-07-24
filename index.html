@@ -32,6 +32,7 @@
       text-align: center;
     }
 
+    
     input {
       padding: 12px 20px;
       font-size: 18px;
@@ -78,6 +79,10 @@
       padding: 10px 0;
       border-bottom: 1px solid #444;
     }
+
+    .simple-name {
+  font-family: Arial, sans-serif;
+}
 
     .trophy {
       width: 24px;
@@ -155,11 +160,14 @@
 
           const trophy = ['🥇', '🥈', '🥉'][index] || '🏅';
 
-          item.innerHTML = `
-            <div>${trophy} <span>${entry.name}</span>&nbsp;</div>
+ 
 
-            <div>${entry.clicks} clicks</div>
-          `;
+item.innerHTML = `
+  <div>${trophy} <span class="simple-name">${entry.name}</span>&nbsp;&nbsp;</div>
+  <div>${entry.clicks} clicks</div>
+`;
+
+          
           leaderboardDiv.appendChild(item);
         });
       }
