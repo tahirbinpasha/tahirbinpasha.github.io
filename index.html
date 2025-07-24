@@ -206,9 +206,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     console.log("IP fetched:", ip);
 
-    // if (!localStorage.getItem("hasVisited")) {
+    // Get geolocation data from IP
+    const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
+    const geoJson = await geoRes.json();
+
+    const country = geoJson.country_name;
+    const city = geoJson.city;
+
+    console.log("Geo data:", { country, city });
+
+   // if (!localStorage.getItem("hasVisited")) {
       const { data, error } = await supabase.from("visitors")
-        .insert([{ ip: ip, user_agent: userAgent }]);
+        .insert([{
+          ip: ip,
+          user_agent: userAgent,
+          country: country,
+          city: city
+        }]);
 
       if (error) {
         console.error("Supabase insert error:", error);
@@ -216,11 +230,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.log("Visitor inserted:", data);
         localStorage.setItem("hasVisited", "true");
       }
-    // }
+  //  }
   } catch (err) {
-    console.error("IP fetch failed:", err);
+    console.error("Fetch failed:", err);
   }
 });
+
 </script>
 
 
