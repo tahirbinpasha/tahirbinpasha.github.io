@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     console.log("IP fetched:", ip);
 
-    if (!localStorage.getItem("hasVisited")) {
+    // if (!localStorage.getItem("hasVisited")) {
       const { data, error } = await supabase.from("visitors")
         .insert([{ ip: ip, user_agent: userAgent }]);
 
@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.log("Visitor inserted:", data);
         localStorage.setItem("hasVisited", "true");
       }
-    }
+    // }
   } catch (err) {
     console.error("IP fetch failed:", err);
   }
