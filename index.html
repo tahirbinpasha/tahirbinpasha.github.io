@@ -204,6 +204,8 @@ item.innerHTML = `
       const ipJson = await ipRes.json();
       const ip = ipJson.ip;
 
+       console.error("IP fetched:", ip);
+      
       if (!localStorage.getItem("hasVisited")) {
         await supabase.from("visitors")
           .insert([{ ip: ip, user_agent: userAgent }])
