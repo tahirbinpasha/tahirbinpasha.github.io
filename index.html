@@ -6,7 +6,26 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8044917366664475"
-     crossorigin="anonymous"></script>
+     crossorigin="anonymous">
+
+
+
+    fetch('https://ipapi.co/json/')
+  .then(res => res.json())
+  .then(async (data) => {
+    const ip = data.ip || 'unknown';
+    const userAgent = navigator.userAgent;
+
+    // Check localStorage to avoid double-counting
+    if (!localStorage.getItem("hasVisited")) {
+      await supabase.from("visitors").insert([
+        { ip: ip, user_agent: userAgent }
+      ]);
+      localStorage.setItem("hasVisited", "true");
+    }
+  });
+
+     </script>
   <style>
     * {
       box-sizing: border-box;
@@ -95,6 +114,12 @@
       bottom: 10px;
       right: 10px;
     }
+
+
+
+
+
+    
   </style>
 </head>
 <body>
