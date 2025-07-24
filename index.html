@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Something is Coming...</title>
+  <meta charset="UTF-8">
+  <title>Click Game</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Orbitron', sans-serif;
+    }
+
     body {
       margin: 0;
-      padding: 0;
-      background: #000;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #000;
       color: #fff;
       display: flex;
       justify-content: center;
@@ -19,61 +23,148 @@
     }
 
     .container {
+      display: flex;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .center {
       text-align: center;
-      padding: 30px;
     }
 
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
-      letter-spacing: 2px;
+    input {
+      padding: 12px 20px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 20px;
+      width: 250px;
     }
 
-    p {
-      color: #aaa;
-      font-size: 1.1em;
+    button {
+      background-color: #ff4136;
+      border: none;
+      padding: 30px 60px;
+      font-size: 28px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      color: #fff;
     }
 
-    .glitch {
-      font-size: 3em;
-      color: #0f0;
-      animation: flicker 2s infinite alternate;
-      text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
+    button:hover {
+      background-color: #ff6f61;
+      transform: scale(1.05);
     }
 
-    @keyframes flicker {
-      0% { opacity: 0.2; text-shadow: none; }
-      50% { opacity: 1; text-shadow: 0 0 5px #0f0, 0 0 10px #0f0; }
-      100% { opacity: 0.3; text-shadow: none; }
+    .leaderboard {
+      background-color: #111;
+      padding: 20px;
+      border-radius: 20px;
+      max-height: 500px;
+      overflow-y: auto;
     }
 
-    .dot {
-      font-size: 2em;
-      animation: dots 1.5s infinite steps(4);
+    .leaderboard h2 {
+      text-align: center;
+      color: gold;
+      margin-bottom: 15px;
     }
 
-    .mystery {
-      margin-top: 30px;
-      font-style: italic;
-      opacity: 0.7;
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #444;
     }
 
-    .visitor-count {
-      margin-top: 40px;
-      font-size: 0.9em;
-      color: #666;
+    .trophy {
+      width: 24px;
+      margin-right: 10px;
+    }
+     .visitor-count {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="glitch">Something is Coming</div>
-    <h1>But What?</h1>
-    <p class="dot">...</p>
-    <p class="mystery">Prepare for something unexpected. Stay curious.</p>
-    <div class="visitor-count"> <img src="https://visitor-badge.laobi.icu/badge?page_id=thequiettech-under-construction" alt="Visitor count"></div>
+    <div class="center">
+      <input type="text" id="nameInput" placeholder="Enter your name">
+      <br>
+      <button onclick="handleClick()">🔥 CLICK 🔥</button>
+    </div>
+
+    <div class="leaderboard">
+      <h2>🏆 Leaderboard</h2>
+      <div id="leaderboardList"></div>
+    </div>
   </div>
 
- 
+ <div class="visitor-count">
+    <img src="https://visitor-badge.laobi.icu/badge?page_id=click_champ_thequiettech" alt="Visitor count">
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://baprqufrtxmjtwlzamiv.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhcHJxdWZydHhtanR3bHphbWl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMzMzUxNzYsImV4cCI6MjA2ODkxMTE3Nn0.BlE2mzVUbAkFM1jsU6mLK-LhLlPZmEVv6Snc0Zd8Dto'; // Truncated for safety
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function handleClick() {
+      const name = document.getElementById('nameInput').value.trim();
+      if (!name) {
+        alert("Please enter your name!");
+        return;
+      }
+
+      let { data: existing, error: fetchError } = await supabase
+        .from('clicks')
+        .select('*')
+        .eq('name', name)
+        .single();
+
+      if (fetchError || !existing) {
+        await supabase.from('clicks').insert([{ name: name, clicks: 1 }]);
+      } else {
+        await supabase
+          .from('clicks')
+          .update({ clicks: existing.clicks + 1 })
+          .eq('id', existing.id);
+      }
+
+      loadLeaderboard();
+    }
+
+    async function loadLeaderboard() {
+      const { data, error } = await supabase
+        .from('clicks')
+        .select('*')
+        .order('clicks', { ascending: false })
+        .limit(10);
+
+      const leaderboardDiv = document.getElementById('leaderboardList');
+      leaderboardDiv.innerHTML = '';
+
+      if (data) {
+        data.forEach((entry, index) => {
+          const item = document.createElement('div');
+          item.className = 'leaderboard-item';
+
+          const trophy = ['🥇', '🥈', '🥉'][index] || '🏅';
+
+          item.innerHTML = `
+            <div>${trophy} ${entry.name}</div>
+            <div>${entry.clicks} clicks</div>
+          `;
+          leaderboardDiv.appendChild(item);
+        });
+      }
+    }
+
+    loadLeaderboard();
+  </script>
 </body>
 </html>
