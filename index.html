@@ -156,7 +156,8 @@
           const trophy = ['🥇', '🥈', '🥉'][index] || '🏅';
 
           item.innerHTML = `
-            <div>${trophy} ${entry.name} - </div>
+            <div>${trophy} <span>${entry.name}</span>&nbsp;</div>
+
             <div>${entry.clicks} clicks</div>
           `;
           leaderboardDiv.appendChild(item);
