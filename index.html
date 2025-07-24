@@ -186,24 +186,37 @@ item.innerHTML = `
     }
 
     loadLeaderboard();
-
-
-
-    fetch('https://ipapi.co/json/')
-  .then(res => res.json())
-  .then(async (data) => {
-    const ip = data.ip || 'unknown';
-    const userAgent = navigator.userAgent;
-
-    // Check localStorage to avoid double-counting
-    if (!localStorage.getItem("hasVisited")) {
-      await supabase.from("visitors").insert([
-        { ip: ip, user_agent: userAgent }
-      ]);
-      localStorage.setItem("hasVisited", "true");
-    }
-  });
     
   </script>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+  const SUPABASE_URL = "https://XXXXXXXX.supabase.co"; // <-- replace with your project URL
+  const SUPABASE_ANON_KEY = "your_anon_key"; // <-- replace with your anon key
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    const userAgent = navigator.userAgent;
+
+    try {
+      const ipRes = await fetch("https://api64.ipify.org?format=json");
+      const ipJson = await ipRes.json();
+      const ip = ipJson.ip;
+
+      if (!localStorage.getItem("hasVisited")) {
+        await supabase.from("visitors")
+          .insert([{ ip: ip, user_agent: userAgent }])
+          .then(() => localStorage.setItem("hasVisited", "true"))
+          .catch((err) => console.error("Insert error:", err));
+      }
+    } catch (err) {
+      console.error("IP fetch failed:", err);
+    }
+  });
+</script>
+
+
+  
 </body>
 </html>
