@@ -51,100 +51,125 @@
 
      </script>
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Orbitron', sans-serif;
-    }
+  * {
+    box-sizing: border-box;
+    font-family: 'Orbitron', sans-serif;
+  }
 
+  body {
+    margin: 0;
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .container {
+    display: flex;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  input {
+    padding: 12px 20px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 20px;
+    width: 250px;
+  }
+
+  button {
+    background-color: #ff4136;
+    border: none;
+    padding: 30px 60px;
+    font-size: 28px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    color: #fff;
+  }
+
+  button:hover {
+    background-color: #ff6f61;
+    transform: scale(1.05);
+  }
+
+  .leaderboard {
+    background-color: #111;
+    padding: 20px;
+    border-radius: 20px;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  .leaderboard h2 {
+    text-align: center;
+    color: gold;
+    margin-bottom: 15px;
+  }
+
+  .leaderboard-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #444;
+  }
+
+  .simple-name {
+    font-family: Arial, sans-serif;
+  }
+
+  .trophy {
+    width: 24px;
+    margin-right: 10px;
+  }
+
+  .visitor-count {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  /* 🌐 Responsive */
+  @media (max-width: 768px) {
     body {
-      margin: 0;
-      background-color: #000;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
+      height: auto;
+      padding: 20px;
     }
 
     .container {
-      display: flex;
-      gap: 60px;
-      align-items: center;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 30px;
     }
 
-    .center {
-      text-align: center;
-    }
-
-    
     input {
-      padding: 12px 20px;
-      font-size: 18px;
-      border-radius: 8px;
-      border: none;
-      margin-bottom: 20px;
-      width: 250px;
+      width: 100%;
+      max-width: 100%;
     }
 
     button {
-      background-color: #ff4136;
-      border: none;
-      padding: 30px 60px;
-      font-size: 28px;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: 0.2s ease;
-      color: #fff;
-    }
-
-    button:hover {
-      background-color: #ff6f61;
-      transform: scale(1.05);
+      width: 100%;
+      max-width: 100%;
+      font-size: 22px;
+      padding: 20px;
     }
 
     .leaderboard {
-      background-color: #111;
-      padding: 20px;
-      border-radius: 20px;
-      max-height: 500px;
-      overflow-y: auto;
+      max-height: 300px;
     }
+  }
+</style>
 
-    .leaderboard h2 {
-      text-align: center;
-      color: gold;
-      margin-bottom: 15px;
-    }
-
-    .leaderboard-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px solid #444;
-    }
-
-    .simple-name {
-  font-family: Arial, sans-serif;
-}
-
-    .trophy {
-      width: 24px;
-      margin-right: 10px;
-    }
-     .visitor-count {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-    }
-
-
-
-
-
-    
-  </style>
 </head>
 <body>
   <div class="container">
