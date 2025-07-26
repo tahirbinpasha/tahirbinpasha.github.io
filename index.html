@@ -61,16 +61,17 @@
     background-color: #000;
     color: #fff;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
   }
 
   .container {
     display: flex;
     gap: 60px;
     align-items: center;
+    justify-content: center;
+    margin-top: 40px;
   }
 
   .center {
@@ -139,10 +140,53 @@
     right: 10px;
   }
 
-  /* 🌐 Responsive */
+  .for-sale-banner {
+    width: 100%;
+    background-color: #111;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid #ff4136;
+    z-index: 10;
+  }
+
+  .for-sale-banner h3 {
+    color: #ff4136;
+    margin: 0 0 10px;
+    font-size: 20px;
+  }
+
+  .sale-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sale-form input {
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: none;
+    width: 250px;
+  }
+
+  .sale-form button {
+    background-color: #ff4136;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .sale-form button:hover {
+    background-color: #ff6f61;
+  }
+
   @media (max-width: 768px) {
     body {
-      height: auto;
       padding: 20px;
     }
 
@@ -172,6 +216,14 @@
 
 </head>
 <body>
+    <div class="for-sale-banner">
+    <h3>🚀 This domain is for sale</h3>
+    <div class="sale-form">
+      <input type="email" id="saleEmail" placeholder="Enter your email to contact">
+      <button onclick="submitSaleEmail()">Contact Me</button>
+    </div>
+  </div>
+
   <div class="container">
     <div class="center">
       <input type="text" id="nameInput" placeholder="Enter your name">
@@ -218,6 +270,34 @@
 
       loadLeaderboard();
     }
+
+
+    async function submitSaleEmail() {
+    const email = document.getElementById("saleEmail").value;
+   
+
+    if (!email) {
+      alert("Please enter your email.");
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from("domain_interest")
+        .insert([{ email }]);
+
+      if (error) {
+        console.error(error);
+        alert("Something went wrong. Try again later.");
+      } else {
+        alert("Thanks! We'll be in touch soon.");
+        document.getElementById("saleEmail").value = "";
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Try again later.");
+    }
+  }
 
     async function loadLeaderboard() {
       const { data, error } = await supabase
